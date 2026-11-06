@@ -24,8 +24,11 @@ a{color:#2a78d6;font-weight:600}
 (function () {
   var k = document.getElementById('k');
   function yok(m) { k.innerHTML = '<h1>Pano şu an yayında değil</h1><p>' + m + '</p>'; }
-  fetch('link.json?t=' + Date.now(), { cache: 'no-store' })
-    .then(function (r) { return r.json(); })
+  // GitHub Pages link.json'u ~10 dk önbellekte tutar; GitHub API anında güncel (yalnız yedek olarak Pages)
+  function al(u) { return fetch(u, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+  al('https://api.github.com/repos/goktugonen/gozetmen/contents/link.json?ref=main&t=' + Date.now())
+    .then(function (c) { return JSON.parse(decodeURIComponent(escape(atob(c.content.replace(/\s/g, ''))))); })
+    .catch(function () { return al('link.json?t=' + Date.now()); })
     .then(function (d) {
       if (d && /^https:\/\/[a-z0-9-]+\.trycloudflare\.com\/?$/.test(d.url || '')) location.replace(d.url);
       else yok('Yayın başladığında bu bağlantı ve QR kod kendiliğinden çalışır. Biraz sonra yeniden deneyin.');
