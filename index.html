@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#16263d">
+<title>Gözetmen Paneli</title>
+<style>
+:root{color-scheme:light dark}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f3f5f8;color:#121826;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:16px;box-sizing:border-box}
+@media (prefers-color-scheme:dark){body{background:#111214;color:#f0efec}.k{background:#1a1a19!important;border-color:#2c2d30!important}}
+.k{background:#fff;border:1px solid #e3e7ee;border-radius:16px;padding:28px;max-width:380px;width:100%;text-align:center}
+h1{font-size:20px;margin:0 0 8px}p{margin:0;color:#5f6878}
+.c{width:28px;height:28px;border:3px solid #d3d9e2;border-top-color:#2a78d6;border-radius:50%;margin:0 auto 16px;animation:d 1s linear infinite}
+@keyframes d{to{transform:rotate(360deg)}}
+a{color:#2a78d6;font-weight:600}
+</style>
+</head>
+<body>
+<div class="k" id="k"><div class="c"></div><h1>Gözetmen Paneli açılıyor…</h1><p>Birkaç saniye sürebilir.</p></div>
+<noscript><p style="text-align:center">Bu sayfa için tarayıcıda JavaScript açık olmalıdır.</p></noscript>
+<script>
+(function () {
+  var k = document.getElementById('k');
+  function yok(m) { k.innerHTML = '<h1>Pano şu an yayında değil</h1><p>' + m + '</p>'; }
+  fetch('link.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && /^https:\/\/[a-z0-9-]+\.trycloudflare\.com\/?$/.test(d.url || '')) location.replace(d.url);
+      else yok('Yayın başladığında bu bağlantı ve QR kod kendiliğinden çalışır. Biraz sonra yeniden deneyin.');
+    })
+    .catch(function () { yok('Bağlantı bilgisi alınamadı. Biraz sonra yeniden deneyin.'); });
+})();
+</script>
+</body>
+</html>
