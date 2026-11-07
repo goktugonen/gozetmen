@@ -30,7 +30,7 @@ a{color:#2a78d6;font-weight:600}
     .then(function (c) { return JSON.parse(decodeURIComponent(escape(atob(c.content.replace(/\s/g, ''))))); })
     .catch(function () { return al('link.json?t=' + Date.now()); })
     .then(function (d) {
-      if (d && /^https:\/\/[a-z0-9-]+\.trycloudflare\.com\/?$/.test(d.url || '')) location.replace(d.url);
+      if (d && /^https:\/\/[a-z0-9-]+\.trycloudflare\.com\/?$/.test(d.url || '')) location.replace(d.url.replace(/\/$/, '') + (/[?&]uzak\b/.test(location.search) ? '/uzak' : '/'));
       else yok('Yayın başladığında bu bağlantı ve QR kod kendiliğinden çalışır. Biraz sonra yeniden deneyin.');
     })
     .catch(function () { yok('Bağlantı bilgisi alınamadı. Biraz sonra yeniden deneyin.'); });
